@@ -10,3 +10,6 @@ L'application est censée automiser lors du premier affichage la création de la
 Toutefois, les requêtes sont disponibles dans le fichier **gestion_achats.sql**. Cependant, les requêtes ont été modifiées pour fonctionner via l'exécution d'une fonction PHP.
 ## Fonctionnalités
 L'application offre la possibilité de voir - d'ajouter - de supprimer - de modifier une commande.
+Ajout automatique via trigger d'une alerte lorsqu'une commande dépasse 10000€.
+## Collaboration
+En attente d'accès aux données des modules de stock et de comptabilité.
