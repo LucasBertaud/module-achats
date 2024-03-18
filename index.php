@@ -1,8 +1,8 @@
 <?php
 try {
     $user = "root";
-    $password = "";
-    $dsn = 'mysql:dbname=gestion_achats;host=127.0.0.1';
+    $password = "root";
+    $dsn = 'mysql:dbname=gestion_achats;host=127.0.0.1:8889';
     $pdo = new PDO($dsn, $user, $password);
     if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $quantity = $_POST["quantity"];
@@ -32,7 +32,7 @@ try {
     $path = __DIR__.'/gestion_achats.sql';
     if (file_exists($path)) {
         $file = file_get_contents($path);
-        $dsn = 'mysql:host=127.0.0.1';
+        $dsn = 'mysql:host=127.0.0.1:8889';
         $pdo = new PDO($dsn, $user, $password);
         $pdo->exec($file);
         header("Refresh:0");
@@ -52,6 +52,7 @@ try {
     <script src="TotalPrice.js" defer></script>
     <script src="DeleteOrder.js" defer></script>
     <script src="UpdateOrder.js" defer></script>
+    <script src="AlertModal.js" defer></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -109,7 +110,7 @@ try {
             <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
                 <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
                     <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-                        <button type="button" id="createProductModalButton" data-modal-target="createProductModal" data-modal-toggle="createProductModal" class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
+                        <button type="button" id="createProductModalButton" data-modal-target="createProductModal" data-modal-toggle="createProductModal" class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800 transition">
                             <svg class="h-3.5 w-3.5 mr-2" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                 <path clip-rule="evenodd" fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
                             </svg>
@@ -174,6 +175,30 @@ try {
                                 </ul>
                             </div>
                         </div>
+                    </div>
+                    <button id="btn-modal-alert" class="bg-primary-700 hover:bg-primary-800 transition rounded-full p-3 flex items-center justify-center">
+                        <img src="img/bell.svg" class="size-5">
+                    </button>
+                    <div id="modal-alert" class="hidden border rounded absolute right-0 top-16 bg-white px-4">
+                        <ul>
+                            <?php
+                            $query = $pdo->query('SELECT * FROM `alertes`;')->fetch();
+                            if ($query) {
+                                foreach($query as $item) {
+                                    echo '<li class="py-4 border-b last:border-b-0 flex items-center justify-between gap-24">
+                                            <span>
+                                               ' . $query["type_alerte"] . '
+                                            </span>
+                                            <button>
+                                                <img src="img/cross.svg" class="size-4">
+                                            </button>
+                                        </li>';
+                                }
+                            } else{
+                                echo "Produit introuvable";
+                            }
+                            ?>
+                        </ul>
                     </div>
                 </div>
                 <div class="overflow-x-auto">

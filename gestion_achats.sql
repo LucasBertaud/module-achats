@@ -11,6 +11,16 @@ CREATE TABLE IF NOT EXISTS gestion_achats.fournisseurs
     IBAN VARCHAR(34) NOT NULL UNIQUE
 );
 
+CREATE TABLE IF NOT EXISTS gestion_achats.produits
+(
+    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    nom VARCHAR(255),
+    description TEXT,
+    prix_unitaire DECIMAL(8,2),
+    id_fournisseur INT NOT NULL,
+    CONSTRAINT FK_fournisseurs_produits FOREIGN KEY (id_fournisseur) REFERENCES fournisseurs(id)
+);
+
 CREATE TABLE IF NOT EXISTS gestion_achats.commandes
 (
     id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -21,17 +31,7 @@ CREATE TABLE IF NOT EXISTS gestion_achats.commandes
     id_fournisseur INT NOT NULL,
     CONSTRAINT FK_fournisseurs_commandes FOREIGN KEY (id_fournisseur) REFERENCES fournisseurs(id), 
     id_produit INT NOT NULL,
-    CONSTRAINT FK_produits_commandes FOREIGN KEY (id_produit) REFERENCES produit(id) 
-);
-
-CREATE TABLE IF NOT EXISTS gestion_achats.produits
-(
-    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    nom VARCHAR(255),
-    description TEXT,
-    prix_unitaire DECIMAL(8,2),
-    id_fournisseur INT NOT NULL,
-    CONSTRAINT FK_fournisseurs_produits FOREIGN KEY (id_fournisseur) REFERENCES fournisseurs(id)
+    CONSTRAINT FK_produits_commandes FOREIGN KEY (id_produit) REFERENCES produits(id) 
 );
 
 CREATE TABLE IF NOT EXISTS gestion_achats.alertes
@@ -218,6 +218,12 @@ CREATE PROCEDURE select_commandes(
     IN p_offset int,
     IN p_limit int
 )
-    BEGIN
-        SELECT `id`, `quantite`, `statut`, DATE_FORMAT(`date_commande`, "%d/%m/%Y - %H:%i") as date_commande , `prix`, `id_fournisseur`, `id_produit` FROM `commandes` ORDER BY UNIX_TIMESTAMP(date_commande) DESC LIMIT p_offset,p_limit;
-    END;
+BEGIN
+    SELECT `id`, `quantite`, `statut`, DATE_FORMAT(`date_commande`, "%d/%m/%Y - %H:%i") as date_commande , `prix`, `id_fournisseur`, `id_produit` FROM `commandes` ORDER BY UNIX_TIMESTAMP(date_commande) DESC LIMIT p_offset,p_limit;
+END;
+    
+USE gestion_achats;
+CREATE PROCEDURE `lister_alertes`()
+BEGIN
+    SELECT * FROM gestion_achats.alertes;
+END;
