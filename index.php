@@ -182,12 +182,12 @@ try {
                     <div id="modal-alert" class="hidden border rounded absolute right-0 top-16 bg-white px-4">
                         <ul>
                             <?php
-                            $query = $pdo->query('SELECT * FROM `alertes`;')->fetch();
+                            $query = $pdo->query('SELECT type_alerte FROM `alertes`;')->fetchAll();
                             if ($query) {
                                 foreach($query as $item) {
                                     echo '<li class="py-4 border-b last:border-b-0 flex items-center justify-between gap-24">
                                             <span>
-                                               ' . $query["type_alerte"] . '
+                                               ' . $item[0] . '
                                             </span>
                                             <button>
                                                 <img src="img/cross.svg" class="size-4">
@@ -195,7 +195,7 @@ try {
                                         </li>';
                                 }
                             } else{
-                                echo "Produit introuvable";
+                                echo "Aucune alerte trouvé.";
                             }
                             ?>
                         </ul>
