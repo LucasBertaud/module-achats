@@ -219,7 +219,7 @@ CREATE PROCEDURE select_commandes(
     IN p_limit int
 )
 BEGIN
-    SELECT `id`, `quantite`, `statut`, DATE_FORMAT(`date_commande`, "%d/%m/%Y - %H:%i") as date_commande , `prix`, `id_fournisseur`, `id_produit` FROM `commandes` ORDER BY UNIX_TIMESTAMP(date_commande) DESC LIMIT p_offset,p_limit;
+    SELECT `id`, `quantite`, `statut`, DATE_FORMAT(`date_commande`, "%d/%m/%Y - %H:%i") as date_commande , `prix`, `id_fournisseur`, `id_produit` FROM `commandes` ORDER BY UNIX_TIMESTAMP(date_commande) DESC LIMIT p_offset, p_limit;
 END;
     
 USE gestion_achats;

@@ -1,8 +1,11 @@
 <?php
 try {
     $user = "root";
-    $password = "root";
-    $dsn = 'mysql:dbname=gestion_achats;host=127.0.0.1:8889';
+    $password = "";
+    $ip = '127.0.0.1';
+    $port = '';
+    $port = $port != '' ? ':'.$port : '';
+    $dsn = 'mysql:dbname=gestion_achats;host='.$ip.$port;
     $pdo = new PDO($dsn, $user, $password);
     if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $quantity = $_POST["quantity"];
@@ -19,9 +22,9 @@ try {
         $id = $_DELETE["id"];
         $pdo->exec("CALL supprimer_commande(".$id.")");
     }
-    $page = isset($_GET['page']) ? $_GET['page'] : 1;
-    $limit = intval($page . '0') ;
-    $offset = $limit - 10;
+    $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+    $limit = 10;
+    $offset = intval($page - 1 . '0');
     $commandes = $pdo->query('CALL select_commandes('.$offset.','.$limit.')')->fetchAll();
     $total = $pdo->query('SELECT COUNT(*) as total FROM `commandes` ORDER BY `date_commande`;')->fetch();
     $page_total = $pdo->query('SELECT COUNT(*) as total FROM (SELECT * FROM `commandes` ORDER BY `date_commande` DESC LIMIT '.$offset.','.$limit.') as a;')->fetch();
@@ -32,7 +35,7 @@ try {
     $path = __DIR__.'/gestion_achats.sql';
     if (file_exists($path)) {
         $file = file_get_contents($path);
-        $dsn = 'mysql:host=127.0.0.1:8889';
+        $dsn = 'mysql:host='.$ip.$port;
         $pdo = new PDO($dsn, $user, $password);
         $pdo->exec($file);
         header("Refresh:0");
@@ -288,8 +291,9 @@ try {
                             <?php 
                             
                             if ($page_total["total"] > 0) {
+                                // page 1 mini = 1 ; page 2 mini = 11 ; page 3 mini = 21
                                 $min = $offset + 1;
-                                $max = $offset + $page_total["total"];
+                                $max = $page_total["total"] + $offset;
                                 echo $min . '-' . $max;
                             }else {
                                 echo 'null';
@@ -311,7 +315,7 @@ try {
                             <a href="?page=<?= $page ?>" class="flex items-center justify-center text-sm z-10 py-2 px-3 leading-tight text-primary-600 bg-primary-50 border border-primary-300 hover:bg-primary-100 hover:text-primary-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"><?= $page ?></a>
                         </li>
                         <li>
-                            <a href="?page=<?= $page_total["total"] % $total["total"] != 0 ? $page+1 : $page?>" class="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                            <a href="?page=<?= $page_total["total"] == 10 ? $page+1 : $page?>" class="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
                                 <span class="sr-only">Next</span>
                                 <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />

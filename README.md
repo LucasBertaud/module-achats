@@ -11,5 +11,6 @@ Toutefois, les requêtes sont disponibles dans le fichier **gestion_achats.sql**
 ## Fonctionnalités
 L'application offre la possibilité de voir - d'ajouter - de supprimer - de modifier une commande.
 Ajout automatique via trigger d'une alerte lorsqu'une commande dépasse 10000€.
+Une bulle de notification donne une vue aux alertes, il est également possible de supprimer ces alertes.
 ## Collaboration
 En attente d'accès aux données des modules de stock et de comptabilité.
