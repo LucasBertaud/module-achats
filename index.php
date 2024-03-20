@@ -1,9 +1,9 @@
 <?php
 try {
     $user = "root";
-    $password = "";
+    $password = "root";
     $ip = '127.0.0.1';
-    $port = '';
+    $port = '8889';
     $port = $port != '' ? ':'.$port : '';
     $dsn = 'mysql:dbname=gestion_achats;host='.$ip.$port;
     $pdo = new PDO($dsn, $user, $password);
@@ -182,24 +182,24 @@ try {
                     <button id="btn-modal-alert" class="bg-primary-700 hover:bg-primary-800 transition rounded-full p-3 flex items-center justify-center">
                         <img src="img/bell.svg" class="size-5">
                     </button>
-                    <div id="modal-alert" class="hidden border rounded absolute right-0 top-16 bg-white px-4">
+                    <div id="modal-alert" class="hidden border rounded absolute right-0 top-16 bg-white px-4 h-1/2 overflow-auto">
                         <ul>
                             <?php
-                            $query = $pdo->query('SELECT type_alerte FROM `alertes`;')->fetchAll();
-                            if ($query) {
-                                foreach($query as $item) {
-                                    echo '<li class="py-4 border-b last:border-b-0 flex items-center justify-between gap-24">
-                                            <span>
-                                               ' . $item[0] . '
-                                            </span>
-                                            <button>
-                                                <img src="img/cross.svg" class="size-4">
-                                            </button>
-                                        </li>';
+                                $query = $pdo->query('SELECT type_alerte FROM `alertes`;')->fetchAll();
+                                if ($query) {
+                                    foreach($query as $item) {
+                                        echo '<li class="py-4 border-b last:border-b-0 flex items-center justify-between gap-24">
+                                                <span>
+                                                   ' . $item[0] . '
+                                                </span>
+                                                <button type="submit">
+                                                    <img src="img/cross.svg" class="size-4">
+                                                </button>
+                                            </li>';
+                                    }
+                                } else {
+                                    echo "Aucune alerte trouvé.";
                                 }
-                            } else{
-                                echo "Aucune alerte trouvé.";
-                            }
                             ?>
                         </ul>
                     </div>
