@@ -284,7 +284,7 @@ if (isset($_GET['id'])) {
                                 </div>
                             </div>
                         </div>
-                        <?php $query = $pdo->query('SELECT * FROM `alertes`;')->fetchAll(); ?>
+                        <?php $query = $pdo->query('CALL lister_alertes();')->fetchAll(); ?>
                         <button id="btn-modal-alert"
                                 class="bg-primary-700 hover:bg-primary-800 transition rounded-full p-3 flex items-center justify-center relative after:content[''] <?php if ($query) {
                                     echo "after:h-2 after:w-2 after:rounded-full after:bg-red-700 after:absolute after:top-0 after:right-0 after:translate-y-[25%] after:translate-x-[-25%]";
